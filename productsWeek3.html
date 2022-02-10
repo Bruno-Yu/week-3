@@ -19,7 +19,7 @@
       <div class="container">
         <div class="text-end mt-4">
             <!-- 建立新產品按鈕 -->
-          <button class="btn btn-primary" @click="EditnNew">
+          <button class="btn btn-primary" @click="EditnNew('new')">
             建立新的產品
           </button>
         </div>
@@ -64,16 +64,17 @@
                       </td>
                       <td>
                         <div class="btn-group" :data-id="key">
+                          <!-- 修改3: 嘗試直接傳入item到內層進行修改 -->
                             <!-- 產品細節按鈕 -->
-                            <button type="button" class="btn btn-outline-success btn-sm"  :data-detail-id="key" v-on:click="productDetail">
+                            <button type="button" class="btn btn-outline-success btn-sm"  :data-detail-id="key" v-on:click="productDetail('detail',item)">
                                 細節
                               </button>                
                             <!-- 編輯按鈕 -->
-                          <button type="button" class="btn btn-outline-primary btn-sm"  :data-edit-id="key" @click="EditnNew">
+                          <button type="button" class="btn btn-outline-primary btn-sm"  :data-edit-id="key" @click="EditnNew('edit',item)">
                             編輯
                           </button>
                           <!-- 刪除按鈕 -->
-                          <button type="button" class="btn btn-outline-danger btn-sm" :data-delete-id="key" @click="deleteModal">
+                          <button type="button" class="btn btn-outline-danger btn-sm" :data-delete-id="key" @click="deleteModal('delete',item)">
                             刪除
                           </button>
                         </div>
@@ -108,7 +109,8 @@
                       </div>
                     </div>
                     <template v-if="productDisplay.id">
-                      <img v-for="item in productDisplay.imagesUrl" :src="item" :key="item" alt="" class="images m-2">
+                      <!-- 修正item當key 的問題 -->
+                      <img v-for="(item,key) in productDisplay.imagesUrl" :src="item" :key="key" alt="" class="images m-2">
                     </template>
                    </template>
                    <p class="text-secondary" v-else>請點擊<span class="text-danger">呈現細節</span>按鈕，查看商品細節</p>

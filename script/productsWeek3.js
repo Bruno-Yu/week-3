@@ -81,18 +81,19 @@ const app=Vue.createApp({
         }
     },
     methods:{
+      // 修改 1: 由於不用自行新增id，將GrnNonDuplicateID拿掉
         // 生成隨機id
-        GenNonDuplicateID(){
-            return Math.random().toString(19)
-          },
+        // GenNonDuplicateID(){
+        //     return Math.random().toString(19)
+        //   },
         // 渲染資料到畫面上
         getData(){
             axios.get(`${this.url}/api/${this.path}/admin/products/all`)
             // 成功結果接收
             .then((res)=>{
                 // 取得的結果為雙層物件，key是id value是內容
-                console.log("成功取得資料");
-                console.log(res.data.products);
+                // console.log("成功取得資料");
+                // console.log(res.data.products);
                 this.productsList=res.data.products;
               })
             //   若data取得失敗
@@ -142,13 +143,13 @@ const app=Vue.createApp({
 
         },
         // 產品刪除視窗開啟
-        deleteModal(evt){
+        deleteModal(status,item){
             // 清空productDisplay
             this.productDisplay={
                 imagesURL:[],
             };
             // 目標放入displayProduct
-            this.productDisplay=this.productsList[evt.target.dataset.deleteId];
+            this.productDisplay=item;
             this.deleteproduct=true;
             this.bsDeleteproduct.show();
         },
@@ -167,10 +168,10 @@ const app=Vue.createApp({
 
 
         // 新增與編輯功能，開啟modal視窗
-        EditnNew(evt){
+        EditnNew(status, item){
             // 判斷點到編輯或是新增 使用dataset.editId 是truethy value 是的話就是編輯，不是的話就是新增
             // 編輯做法
-            if(evt.target.dataset.editId){
+            if(status==='edit'){
                 // 帶入編輯目標的內容
                 // 清空上次留下的內容
                 this.productDisplay={
@@ -181,7 +182,7 @@ const app=Vue.createApp({
                 this.detailDisplay=false;
                 this.newproduct=false;
                 // 帶入編輯的內容，但為避免尚未完成編輯而雙向連動，先用淺層複製
-                this.productDisplay={...this.productsList[evt.target.dataset.editId]};
+                this.productDisplay={...item};
                 // console.log(this.bsNewproduct);
 
 
@@ -202,10 +203,10 @@ const app=Vue.createApp({
         },
 
         // 呈現功能按鈕
-        productDetail(evt){
+        productDetail(status, item){
             this.detailDisplay=true;
             // console.log(evt.target.dataset.detailId);
-            const targetItem=this.productsList[evt.target.dataset.detailId];
+            const targetItem=item;
             this.productDisplay=targetItem;
             // console.log(this.productDisplay);
         }
@@ -219,7 +220,7 @@ const app=Vue.createApp({
         axios.post(`${this.url}/api/user/check`)
         // 成功結果接收
         .then((res)=>{
-            console.log(res.data);
+            // console.log(res.data);
             console.log("成功登入");
         //   帶入遠端data使用方法get
         // 確認有權限後進行data接收
